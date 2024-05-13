@@ -1,0 +1,11 @@
+*{
+    margin: 0;
+    font-family: inherit;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    
+}
+.textoejemplo{
+    padding: 2em;
+}

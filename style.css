@@ -1,0 +1,165 @@
+*{
+    margin: 0;
+    font-family: inherit;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    
+}
+body{
+    /* background-color: #F1C93B; */
+    background-color: #ffffff;
+    margin: 0%;
+    padding: 0%;
+}
+
+.HeaderContainer {
+    /**/
+    width: 100%;
+}
+ul{
+    /**/
+    width: 100%;
+    list-style-type: none;
+    overflow: hidden;
+    float: right;
+    margin-right: 20px;
+}
+li{
+    display: inline-block;
+    line-height: 70px;
+    /* margin: 0 5px; */
+}
+li a{
+    background-color: #1A5D1A;
+    display: block;
+    text-align: center;
+    color: white; 
+    font-size: 18px;
+    padding: 7px 13px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+li a.active, li a:hover{
+    background-color: rgb(61, 61, 61);
+    background: #41a441;
+    transition: .5s;
+    color: white;
+}
+nav{
+    background-color: #1A5D1A;
+    height: 80px;
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+nav ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+   width: 100%; 
+   overflow: hidden;
+   height: 100%; 
+}
+nav li {
+    float: left;
+}
+nav li ul {
+    display:none;
+    position: absolute;
+    min-width: 140px;
+}
+
+footer{
+    background-color: #1A5D1A;
+    text-align: center;
+    color: white;
+    padding: 1em 1em;
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    z-index: 1; /*Profundidad, mas atras*/
+}
+
+.btn{
+    font-size: 30px;
+    color: aliceblue;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#click{
+    display: none;
+}
+
+
+.btn{
+    font-size: 30px;
+    color: aliceblue;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#click{
+    display: none;
+}
+
+tr:hover {
+    background-color: lightyellow;
+}
+.contenedorGeneral{
+    display:flex; 
+    width: 100%;
+    
+}
+
+/* Funcion para los dispositivos chicos  */
+@media(max-width: 952px){
+    nav ul li a{
+        font-size: 16px;
+    }
+}
+@media(max-width: 858px){
+    .btn{
+        display: block;
+    }
+    ul{
+        position: fixed;
+        width: 110%;
+        height: 100vh;
+        background:gray;
+        top:80px;
+        left:-100%;
+        text-align: center;
+        transition: all .5s;
+        display: flex;
+        flex-direction: column;
+        z-index: 2;
+    }
+
+    nav ul li {
+        
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+        align-items: center;
+    }
+
+    nav ul li a {
+        font-size: 20px;
+        background: none;
+        color: black;
+    }
+
+    li a:hover, li.active{
+        color: black;
+    }
+    #click:checked ~ ul{
+        left:0;
+    }
+}

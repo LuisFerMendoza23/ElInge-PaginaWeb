@@ -1,0 +1,225 @@
+/*--------------------------Pagina principal*/
+.index_contenedor{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* padding: 2rem; */
+    align-items: center;
+    /* background-color: #F1C93B; */
+    background-color: #ffffff;
+    justify-content: space-between;
+}
+
+.InfoContainer {
+    max-width: 850px;
+    min-width: 550px;
+    width: 70%;
+}
+
+.editarMision, .editarVision, .editarAcercaDe {
+    padding: 0.5em;
+    display: block;
+    float: right;
+}
+/* .editarVision{
+    padding: 0.5em;
+    display: block;
+    float: right;
+} 
+.editarAcercaDe{
+    padding: 0.5em;
+    display: block;
+    float: right;
+} */
+
+.MapContainer {
+    width: 70%;
+    max-width: 850px;
+    min-width: 550px;
+    height: 20%;  
+}
+.mision, .vision, .AcercaDe, .mapa{
+    padding: 1em;
+    margin-bottom: 10px;
+    background-color: #F1C93B;
+    border-radius: 3em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 5px;
+}
+.mision:hover, .vision:hover, .AcercaDe:hover, .mapa:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+    scale: 1.1;
+}
+/* .vision{
+    padding: 1em;
+    margin-bottom: 10px;
+    background-color: #FAE392;
+    border-radius: 3em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 5px;
+}
+.AcercaDe{
+    padding: 1em;
+    margin-bottom: 10px;
+    background-color: #FAE392;
+    border-radius: 3em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 5px;
+}
+.mapa{
+    position: relative;
+    text-align: center;
+    padding: 1em;
+    background-color: #FAE392;
+    border-radius: 3em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 5px;
+} */
+.mapaIMG{
+    width: 80%;
+    height: 80%;
+}
+
+.bt_servicios{
+    margin: 2em;
+    background-color: #1A5D1A;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-style: unset;
+    align-items: center;
+    
+}
+.bt_servicios:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+    
+}
+.bt_servicios a{
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+.bt_servicios a:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+    border: none;
+}
+.modo{
+    font-size: 2.5rem;
+    color: red;
+    right: 0;
+    display: flex;
+}
+
+/*-----------*/
+.opciones{
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    background-color: #F1C93B;
+    width: 20%;
+    padding: 1.5rem;
+    display: grid;
+    grid-row-gap: 40px;
+}
+
+.info{
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    background-color: #F1C93B;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+/* .btnAdminUsuarios .btnAdminServicios, .btnAdminAgenda{
+    color: white;
+    background-color: #1A5D1A;
+    width: 100%; 
+}
+.boton{
+    
+} */
+.btnAdmin {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Espacio entre grupos de botones */
+  }
+  
+  /* Estilos para los botones */
+  .boton {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #1A5D1A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .boton:hover {
+    background-color: #144014; /* Cambio de color al pasar el cursor */
+  }
+  .btnAdminUsuarios,
+  .btnAdminServicios,
+  .btnAdminAgenda,
+  .btnBitacora {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #1A5D1A; /* Cambiamos el color de fondo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Espacio entre botones */
+  }
+  
+  /* Estilos para el contenedor principal */
+.info {
+    text-align: center; /* Centra el contenido */
+}
+
+/* Estilos para la tabla de usuarios */
+.tablaUsuarios, .tablaServicios {
+    
+    
+    margin-bottom: 20px; /* Margen inferior para separar de la otra tabla */
+    display: inline-block; /* Para que las tablas estén en línea */
+    padding: 20px; /* Espaciado interno */
+}
+
+/* Estilos para las celdas de las tablas */
+.tablaUsuarios table,
+.tablaServicios table {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    border-collapse: collapse; /* Colapso de bordes */
+}
+
+.tablaUsuarios table th,
+.tablaUsuarios table td,
+.tablaServicios table th,
+.tablaServicios table td {
+    border: 1px solid black; /* Borde de 1px en color negro */
+    padding: 9px; /* Espaciado interno de las celdas */
+}
+th{
+    background-color: black;
+    color:white;
+}
+
+
+

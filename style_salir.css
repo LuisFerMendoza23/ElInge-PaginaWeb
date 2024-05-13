@@ -1,0 +1,38 @@
+/*--------------------------Pagina principal*/
+
+
+/*----Para lo del header*/
+.header_lista{
+    list-style-type: none;
+    overflow: hidden;
+    background-color: #1A5D1A;
+}
+.l_h_item{
+    float: right;
+}
+.l_h_item a{
+    background-color: #1A5D1A;
+    display: block;
+    text-align: center;
+    color: white; 
+    padding: 1em 1em;
+    text-decoration: none;
+}
+.l_h_item a:hover{
+    background-color: rgb(61, 61, 61);
+    color: white;
+}
+/*-------------*/
+
+/*----FOOTER*/
+footer{
+    background-color: #1A5D1A;
+    text-align: center;
+    color: white;
+    padding: 1em 1em;
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    
+}
+/*------------*/

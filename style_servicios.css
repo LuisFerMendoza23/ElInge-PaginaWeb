@@ -1,0 +1,215 @@
+/*--------PESTAÑA DE SERVICIOS*/
+.serv_contenedor{
+    display: flex;
+    width: 100%;
+    gap: 2em;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2em;
+}
+.serv_tittle{
+    padding: 0.5em;
+}
+.servicio{
+    padding: 1.3em;
+    width: 28%;
+    height: auto;
+    background-color: #F1C93B;
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    min-width: 300px;
+    cursor: pointer;
+    /* flex-grow: 1;
+    flex-basis: 200; */
+}
+.servicio:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+    scale: 1.1;
+}
+.link_serv {
+    font-style: unset;
+}
+.servicio_titulo{
+    padding: 0.5em;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+}
+ .servicio_img{
+    cursor: pointer;
+} 
+.servicio_precio{
+    padding: 0.5em;
+    height: auto;
+    text-align: center;
+}
+
+.servicio_boton{
+    text-align: center;
+    height: auto;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.boton{
+    background-color: #1A5D1A;
+    color: white;
+    width: 80%;
+}
+.boton:hover{
+    background-color: rgb(61, 61, 61);
+}
+/**/
+.imagen_servicio{
+    width: 100%; 
+    height: 240px;
+    /* height: auto; */
+    border-radius: 0.5em;
+}
+
+.info_servicio {
+    width: 100%;
+}
+.editarServicio{
+    padding: 0.5em;
+    display: block;
+    float: right;
+}
+
+/* ----------------------------------------------  */
+.btn_agenda{
+    margin: 2em;
+    height: 50px;
+    background-color: #1A5D1A;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-style: unset;
+    align-items: center;
+    
+}
+.btn_agenda:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+    
+}
+.btn_agenda a{
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+.btn_agenda a:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+    border: none;
+}
+/* .contenedor_botones{
+    display: flex;
+    justify-content: center;
+}  */
+
+
+ 
+/* =====================DESCRIPCION PRODUCTOS==============================  */
+.container{
+    background-color: #F1C93B;
+    margin: 2%;
+    padding: 2%;
+}
+.Desc_container{
+    background-color: #FAE392;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5em;
+    border-radius: 1em;
+}
+.servicio_desc{
+    padding: 0.5em;
+    height: auto;
+}
+.desc_cont_info { 
+    width: 50%;
+    padding: 0.5em;
+}
+.desc_cont_img{
+    width: 50%;
+}
+.cont_otro_serv{
+    width: 100%;
+    padding: 2em;
+}
+.servicios_recomendados{
+    display: flex;
+    width: 100%;
+    padding: 2em;
+}
+.servicio_otro{
+    padding: 1.3em;
+    width: 20%;
+    height: auto;
+    background-color: #FAE392;
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    min-width: 150px;
+    cursor: pointer;
+    display: grid;
+}
+.serv_otro_img{
+    height: 50%
+}
+.ServicioDescImg{
+    width: 100%; 
+    height: 480px;
+    /* height: auto; */
+    object-fit: cover;
+    border-radius: 0.5em;
+}
+.ServicioOtroImg{
+    width: 100%; 
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0.5em;
+}
+.serv_otro_titulo{
+    padding: 0.5em;
+    height: 15%;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-wrap: wrap; 
+    min-width: 102px;
+}
+.serv_otro_precio{
+    padding: 0.5em;
+    height: auto;
+    text-align: center;
+}
+.categoria_servicio{
+    padding: 0.5em;
+    height: auto;
+    text-align: center;
+}
+.boton_correo{
+    margin: 2em;
+    height: 50px;
+    background-color: #1A5D1A;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-style: unset;
+    align-items: center;
+}
+
+.index_contenedor{
+    width: 100%;
+    padding: 0.5rem;
+}

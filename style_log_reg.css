@@ -1,0 +1,146 @@
+/*-------------------------REGISTRO Y LOGIN*/
+*{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+body{
+    background-color: white;
+    margin: 0%;
+    padding: 0%;
+}
+/*------------------------------------*/
+.header_lista{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow: hidden;
+    background-color: #1A5D1A;
+}
+.l_h_item{
+    float: right;
+}
+.l_h_item a{
+    background-color: #1A5D1A;
+    display: block;
+    text-align: center;
+    color: white; 
+    padding: 1em 1em;
+    text-decoration: none;
+}
+.l_h_item a:hover{
+    background-color: rgb(61, 61, 61);
+    color: white;
+}
+footer{
+    background-color: #1A5D1A;
+    color: white;
+    text-align: center;
+    padding: 1em 1em;
+}
+/*----------------------------*/
+.regCampos{
+    text-align: center;
+    /* margin-top: 4%; */
+}
+.loginCampos{
+    text-align: center;
+    margin-top: 4%;
+}
+.formL_contenedor{
+    display: inline-block;
+    gap: 1.5em;
+}
+.formL_datos{
+    position: relative;
+    width: 100%;
+    font-size: 1rem;
+    padding: .6em .3em;
+}
+.formL_boton{
+    color: white;
+    background-color: black;
+    padding: 14px 28px;
+    font-size: 16px;
+}
+.formL_boton:hover{
+    color: white;
+    background-color:gray;
+}
+/*----------------*/
+.registro_contenedor{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2em;
+}
+.registro_formulario{
+    width: 40%;
+    background-color: #F1C93B;
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+}
+.registro_formulario:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+}
+.input{
+    width: 60%;
+}
+.boton_contenedor{
+    display: flex;
+    justify-content: center;
+    grid-gap: 0.3em;
+    border-radius: 1rem;
+}
+.boton{
+    background-color: #1A5D1A;
+    color: white;
+    width: 60%;
+    justify-content: center;
+    text-align: center;
+    border-radius: 1rem;
+}
+.boton_crearcuenta{
+    background-color: #1A5D1A;
+    color: white;
+    width: 60%;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+}
+.crearcuenta{
+    color: white;
+    text-decoration: none;
+}
+
+/*-----------------*/
+.login_contenedor{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 3em;
+}
+.login_formulario{
+    width: 40%;
+    background-color: #F1C93B;
+    border-radius: 1em;
+    border-style: solid;
+    border-color: #1A5D1A;
+    border-width: 3px;
+    padding: 1.5rem;
+}
+
+.login_formulario:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+}
+input{
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 2%;
+    border-radius: 1rem;
+}
