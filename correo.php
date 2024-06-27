@@ -1,110 +1,178 @@
-<?php ob_start(); ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        *{
-            background-color: #FAE392;
-        }
-        body, html {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            height: auto;
-            width: 100%;
-            text-align: center;
-            font-size: 24px;
-            background-color: green;
-            color: white;
-            left: 0;
-            top: 0;
-            position: absolute;
-        }
-        footer {
-            height: auto;
-            width: 100%;
-            /* position: fixed; */
-            text-align: center;
-            font-size: 12px;
-            background-color: green;
-            color: white;
-            /* width: 100%; */
-            left: 0;
-            bottom: 0;
-            position: absolute;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-        }
-        
-        .contenedor{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-</head>
-<header>Comidas El Inge</header>
-<body>
-    <div class="contenedor_general">
-    <H1>GRACIAS POR COMPRAR "EN COMIDAS EL INGE"</H1>
-        <div class="contenedor">
-            <table border="1">
-                <tr>
-                    <th>Nombre Servicio</th>
-                    <th>Descripcion </th>
-                    <th>Precio </th>
-                    <th>cantidad</th>
-                </tr>
-                <tr>
-                    <td>TAquiza </td>
-                    <td>Servicio taquiiza</td>
-                    <td>70</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>Barbacoa </td>
-                    <td>Servicio barbacoa</td>
-                    <td>77</td>
-                    <td>2</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    
-</body>
-<footer>Pie de página - Comidas El Inge</footer>
-</html>
-
 <?php
-
 session_start();
-
-require 'vendor/autoload.php';
-
-use Dompdf\Dompdf;
+require 'vendor/autoload.php'; // Asegúrate de tener autoload.php generado por Composer para PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-$Email = $_SESSION['u_correo'];
+require('fpdf/fpdf.php');
+include "cone.php"; 
 
-// Generar PDF
-$dompdf = new Dompdf();
-$dompdf->loadHtml(ob_get_clean());
-$dompdf->render(); //este comando renderiza el PDF
-$content = $dompdf->output(); //extrae el contenido renderizado del PDF
-$filename = "doc_prueba.pdf";
-$bytes = file_put_contents($filename, $content); //guarda el PDF en un fichero llamado mipdf.pdf
+if (!isset($_SESSION['IdUsuario'])) {
+    echo "No hay variables de sesión definidas.";
+    exit;
+}
 
-// Enviar correo
+$idusuario = $_SESSION['IdUsuario'];
+$username = $_SESSION['Nombre'];
+$correo = $_SESSION['Correo'];
+
+// Obtener información del usuario
+$sql_user = "SELECT Nombre, Correo, Telefono FROM usuarios WHERE IdUsuario = ?";
+$stmt_user = $con->prepare($sql_user);
+$stmt_user->bind_param("i", $idusuario);
+$stmt_user->execute();
+$user_result = $stmt_user->get_result();
+$user_info = $user_result->fetch_assoc();
+$telefono = $user_info['Telefono'];
+
+// Obtener fecha_orden de la orden
+$sql_order = "SELECT Fecha_orden FROM orden WHERE IdUsuario = ? ORDER BY Fecha_orden DESC LIMIT 1";
+$stmt_order = $con->prepare($sql_order);
+$stmt_order->bind_param("i", $idusuario);
+$stmt_order->execute();
+$order_result = $stmt_order->get_result();
+$order_info = $order_result->fetch_assoc();
+$fecha_orden = $order_info['Fecha_orden'];
+
+// Obtener detalles del carrito de compras del usuario
+$sql = "SELECT od.IdOrdenDetalles, od.nombreS, od.descriS, od.precioS, od.Lugar, od.Hora, s.imagenS 
+        FROM orden_detalles od 
+        JOIN orden o ON od.IdOrden = o.IdOrden
+        JOIN servicios s ON od.IdServicio = s.IdServicio
+        WHERE o.IdUsuario = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("i", $idusuario);
+$stmt->execute();
+$result = $stmt->get_result();
+// Generar PDF con FPDF
+class PDF extends FPDF
+{
+    // Cabecera de página
+    function Header()
+    {
+        // Fondo verde
+        $this->SetFillColor(34, 139, 34); // Verde
+        $this->Rect(0, 0, $this->w, 50, 'F');
+        // Logo
+        $this->Image('img/logo.png', 10, 10, 30);
+        // Nombre de la compañía
+        $this->SetFont('Arial', 'B', 24);
+        $this->SetTextColor(255, 255, 255); // Blanco
+        $this->Cell(0, 20, 'El Inge', 0, 1, 'C');
+        $this->Ln(20); // Salto de línea
+    }
+
+    // Pie de página
+    function Footer()
+    {
+        // Posición a 1.5 cm del final
+        $this->SetY(-15);
+        // Fuente Arial itálica 8
+        $this->SetFont('Arial', 'I', 8);
+        // Número de página
+        $this->Cell(0, 10, 'Pagina '.$this->PageNo().'/{nb}', 0, 0, 'C');
+    }
+
+    // Datos del cliente
+    function CustomerDetails($nombre, $correo, $telefono)
+    {
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 10, $nombre, 0, 1, 'C');
+        $this->SetFont('Arial', '', 12);
+        $this->Cell(0, 10, $correo, 0, 1, 'C');
+        $this->Cell(0, 10, $telefono, 0, 1, 'C');
+    }
+
+    // Tabla coloreada
+    function FancyTable($header, $data)
+    {
+        // Colores, ancho de línea y fuente en negrita
+        $this->SetFillColor(255, 255, 255); // Blanco
+        $this->SetTextColor(0);
+        $this->SetDrawColor(0, 0, 0); // Negro
+        $this->SetLineWidth(.3);
+        $this->SetFont('Arial', 'B', 12);
+        // Cabecera
+        $w = array(30, 40, 60, 25, 25, 25);
+        for ($i = 0; $i < count($header); $i++) {
+            $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', true);
+        }
+        $this->Ln();
+        // Restauración de colores y fuentes
+        $this->SetFillColor(224, 235, 255);
+        $this->SetTextColor(0);
+        $this->SetFont('Arial', '', 12);
+        // Datos
+        $fill = false;
+        $total = 0;
+        foreach ($data as $row) {
+            $this->Cell($w[0], 20, $this->Image($row[0], $this->GetX(), $this->GetY(), 20), 'LR', 0, 'C', $fill);
+            $this->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
+            $x = $this->GetX();
+            $y = $this->GetY();
+            $this->MultiCell($w[2], 6, $row[2], 'LR', 'L', $fill);
+            $this->SetXY($x + $w[2], $y);
+            $this->Cell($w[3], 6 * max(ceil(strlen($row[2]) / $w[2]), 1), $row[3], 'LR', 0, 'L', $fill);
+            $this->Cell($w[4], 6 * max(ceil(strlen($row[2]) / $w[2]), 1), $row[4], 'LR', 0, 'L', $fill);
+            $this->Cell($w[5], 6 * max(ceil(strlen($row[2]) / $w[2]), 1), $row[5], 'LR', 0, 'L', $fill);
+            $this->Ln();
+            $fill = !$fill;
+            $total += floatval($row[5]); // Convertir el precio a flotante y sumarlo al total
+        }
+        // Línea de cierre
+        $this->Cell(array_sum($w), 0, '', 'T');
+        return $total;
+    }
+
+    // Subtotales y total
+    function Totals($subtotal)
+    {
+        $this->Ln(10);
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 10, 'Subtotal: $' . number_format($subtotal, 2), 0, 1, 'R');
+        $tax = $subtotal * 0.10; // Impuesto del 10%
+        $this->Cell(0, 10, 'Tax (10%): $' . number_format($tax, 2), 0, 1, 'R');
+        $total = $subtotal + $tax;
+        $this->Cell(0, 10, 'Total: $' . number_format($total, 2), 0, 1, 'R');
+    }
+}
+
+// Creación del objeto de la clase heredada
+$pdf = new PDF();
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->SetFont('Arial', '', 14);
+
+// Fecha de la orden
+$pdf->SetFont('Arial', 'I', 12);
+$pdf->Cell(0, 10, date('d F, Y', strtotime($fecha_orden)), 0, 1, 'R');
+$pdf->Ln(10);
+
+// Datos del cliente
+$pdf->CustomerDetails($user_info['Nombre'], $user_info['Correo'], $user_info['Telefono']);
+
+// Column headings
+$header = array('Imagen', 'Nombre', 'Descripcion', 'Lugar', 'Hora', 'Precio');
+// Data loading
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    $data[] = [
+        htmlspecialchars($row["imagenS"]),
+        htmlspecialchars($row["nombreS"]),
+        htmlspecialchars($row["descriS"]),
+        htmlspecialchars($row["Lugar"]),
+        htmlspecialchars($row["Hora"]),
+        htmlspecialchars($row["precioS"])
+    ];
+}
+$subtotal = $pdf->FancyTable($header, $data);
+$pdf->Totals($subtotal);
+
+// Guardar el archivo PDF
+$filename = "ReciboCompra.pdf";
+$pdf->Output($filename, 'F');
+
+// Enviar correo con PHPMailer
 $mail = new PHPMailer(true);
 
 try {
@@ -113,32 +181,29 @@ try {
     $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'comidas.el.inge@gmail.com';
-    $mail->Password   = 'hccgulqrslcxuimf';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    $mail->Port       = 465;
+    $mail->Password   = 'hccg ulqr slcx uimf';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
 
-    $mail->setFrom('comidas.el.inge@gmail.com', 'Luis Fernando');
-    $mail->addAddress($Email, 'Usuario'); 
-// $mail->addAddress('lfmb123098@gmail.com');
+    // Remitente y destinatarios
+    $mail->setFrom('comidas.el.inge@gmail.com', 'Comidas El Inge');
+    $mail->addAddress($correo, $username);
 
+    // Contenido del correo
     $mail->isHTML(true);
-    $mail->Subject = 'Mensaje de prueba con pdf';
-    $mail->Body    = 'Este es un mensaje e prueba para usar y mandar el correo y pdf';
-    $mail->AltBody = 'Este es el cuerpo del mensaje en texto plano para clientes de correo que no admiten HTML. ¡Hola!';
+    $mail->Subject = 'Recibo de tu compra - Comidas El Inge';
+    $mail->Body    = 'Gracias por tu compra. En el archivo adjunto encontrarás el recibo detallado.';
+    $mail->AltBody = 'Gracias por tu compra. En el archivo adjunto encontrarás el recibo detallado.';
 
-    // Adjuntar el PDF
-    $mail->addAttachment($filename, 'doc_prueba.pdf');
+    // Adjuntar PDF
+    $mail->addAttachment($filename);
 
     $mail->send();
-    echo 'El correo ha sido enviado correctamente';
+    echo 'Correo enviado exitosamente.';
 } catch (Exception $e) {
-    echo "Error al hacer el envio. Error del correo: {$mail->ErrorInfo}";
+    echo "No se pudo enviar el correo. Error de Mailer: {$mail->ErrorInfo}";
 }
 
-// Eliminar el archivo PDF después de enviar el correo (opcional)
 unlink($filename);
-
-
+$con->close();
 ?>
-
-

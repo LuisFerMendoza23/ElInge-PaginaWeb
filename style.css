@@ -28,6 +28,7 @@ ul{
 li{
     display: inline-block;
     line-height: 70px;
+    padding: 0 5px;
     /* margin: 0 5px; */
 }
 li a{
@@ -36,7 +37,7 @@ li a{
     text-align: center;
     color: white; 
     font-size: 18px;
-    padding: 7px 13px;
+    /*padding: 7px 13px;*/
     border-radius: 3px;
     text-decoration: none;
 }
@@ -52,7 +53,7 @@ nav{
     width:100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 nav ul{
     list-style-type: none;
@@ -61,9 +62,11 @@ nav ul{
    width: 100%; 
    overflow: hidden;
    height: 100%; 
+   display: contents;
 }
 nav li {
     float: left;
+    color: white;
 }
 nav li ul {
     display:none;
@@ -117,6 +120,15 @@ tr:hover {
     width: 100%;
     
 }
+/*
+.nav_carrito{
+    display: flex;
+    justify-content: space-between;
+}
+.nav_servicios{
+    display: flex;
+    justify-content: space-between;
+} */
 
 /* Funcion para los dispositivos chicos  */
 @media(max-width: 952px){

@@ -1,13 +1,18 @@
 <?php
-    session_start();
-    include "cone.php";
-    
-    $arreglo = array();
-    // Realizar consulta a la base de datos para obtener los servicios
-    $sql = "SELECT * FROM servicios"; // Ajusta esta consulta según la estructura de tu base de datos
-    $result = mysqli_query($con, $sql);
+session_start();
+include "cone.php";
 
-    // if ($result->num_rows > 0) {
+$arreglo = array();
+// Realizar consulta a la base de datos para obtener los servicios
+$sql = "SELECT * FROM servicios"; // Ajusta esta consulta según la estructura de tu base de datos
+$result = mysqli_query($con, $sql);
+/*
+    if(isset($_SESSION['IdUsuario'])){
+
+        $idservicio = mysqli_query($con, "SELECT IdServicio FROM servicios ");
+    } */
+    
+    //if ($result->num_rows > 0) {
     //     // Recorrer los resultados y crear divs de servicio dinámicamente
     //     while($row = $result->fetch_assoc()) {
     //         // Obtener la información de cada servicio
@@ -16,25 +21,23 @@
     //         $descripcion = $row["descriS"];
     //         $precio = $row["precioS"];
     //         $imagen = $row["imagenS"];
+    //}
+    $username = $_SESSION['Nombre'];
 ?>
 
 <!DOCTYPE html>
-<html >
+<html>
 <head>
     <link href="style_servicios.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
-                           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" 
-                           crossorigin="anonymous" referrerpolicy="no-refferer">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-refferer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Quattrocento:wght@700&display=swap" rel="stylesheet">
 </head>
 <header class="HeaderContainer">
     <div class="cont_header">
-        <nav>
+        <nav class="nav_servicios">
             <input type="checkbox" id="click">
             <label for="click" class="btn">
                 <i class="fa-solid fa-bars"></i>
@@ -47,6 +50,18 @@
                 <li> <a id="carritobtn" href="carrito.php">Carrito</a></li>
                 <li> <a id="salirbtn" href="salir.php">Salir</a></li>
             </ul>
+            <ul> 
+                <div class="menu_user">
+                <div class="menu_user">
+                <?php 
+                    if(isset($_SESSION['Nombre'])){
+                        $username = $_SESSION['Nombre'];
+                        echo '<li> Usuario: ' . htmlspecialchars($username) . '</li>';
+                    } 
+                ?>
+            </div>
+                </div>
+            </ul>
         <script>
             function goBack() {
                 window.history.back();
@@ -58,56 +73,57 @@
 <body>
     <h1 class="serv_tittle">Servicios que puedes contratar:</h1>
     <div class="serv_contenedor">
-        
-            <?php
-                // Verificar si la consulta tuvo éxito y hay resultados
-            if ($result && mysqli_num_rows($result) > 0) {
-                // Iterar sobre cada fila de servicios
-                 while ($row = mysqli_fetch_assoc($result)) {
-                
-                    // Acceder a los datos de cada servicio
-                    $nombreServicio = $row["nombreS"];
-                    $categoria = $row["categoS"];
-                    $descripcion = $row["descriS"];
-                    $precio = $row["precioS"];
-                    $imagen = $row["imagenS"];
+        <?php
+            // Verificar si la consulta tuvo éxito y hay resultados
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Iterar sobre cada fila de servicios
+            while ($row = mysqli_fetch_assoc($result)) {
+                // Acceder a los datos de cada servicio
+                $idservicio = $row['IdServicio'];
+                $nombreServicio = $row["nombreS"];
+                $categoria = $row["categoS"];
+                $descripcion = $row["descriS"];
+                $precio = $row["precioS"];
+                $imagen = $row["imagenS"];
 
-                    echo '<div class="servicio">';
-                        echo '<div class="servicio_img">';
-                        echo '<img src="' . $imagen . '" class="imagen_servicio" alt="Imagen del servicio">';
-                        echo '</div>';
-                        echo '<div class="servicio_titulo">';
-                        echo '<h3>' . $nombreServicio . '</h3>';
-                        echo '</div>';
-                        echo '<div class="categoria_servicio">';
-                        echo '<p class="categoria_servicio"><b>' . $categoria . '</b></p>';
-                        echo '</div>';
-                        echo '<div class="servicio_desc">';
-                        echo '<p>' . $descripcion . '</p>';
-                        echo '</div>';
-                        echo '<div class="servicio_precio">';
-                        echo '<p class="precio"><b>$' .$precio . '</b></p>';
-                        echo '</div>';
-                        echo '<div class="servicio_boton">';
-                        echo '<a href="agenda.php"><button class="boton">Agregar al carrito</button></a>';
-                        //echo '<button class="boton">Agregar al carrito</button>';
-                        echo '</div>';
-                    echo '</div>';
-                }
-            } else {
-                // En caso de no encontrar servicios
-                echo "<p>No se encontraron servicios.</p>";
+                echo '<div class="servicio">';
+                echo '<div class="servicio_img">';
+                echo '<img src="' . $imagen . '" class="imagen_servicio" alt="Imagen del servicio">';
+                echo '</div>';
+                echo '<div class="servicio_titulo">';
+                echo '<h3>' . $nombreServicio . '</h3>';
+                echo '</div>';
+                echo '<div class="categoria_servicio">';
+                echo '<p class="categoria_servicio"><b>' . $categoria . '</b></p>';
+                echo '<p class="categoria_servicio"><b>' . $idservicio . '</b></p>';
+                echo '</div>';
+                echo '<div class="servicio_desc">';
+                echo '<p>' . $descripcion . '</p>';
+                echo '</div>';
+                echo '<div class="servicio_precio">';
+                echo '<p class="precio"><b>$' .$precio . '</b></p>';
+                echo '</div>';
+                echo '<div class="servicio_boton">';
+                echo '<a href="agenda.php?idservicio=' . $idservicio . '"><button class="boton">Agregar al carrito</button></a>';
+                echo '</div>';
+                echo '</div>';
             }
+        } else {
+            // En caso de no encontrar servicios
+            echo "<p>No se encontraron servicios.</p>";
+        }
 
-            // Cerrar la conexión después de usarla
-            mysqli_close($con);
-            ?>
+        // Cerrar la conexión después de usarla
+        mysqli_close($con);
+        ?>
     </div>
+    <!-- 
     <div class="contenedor_botones">
         <div class="cont_bt_agenda">
             <button type="submit" class="btn_agenda">Ver agenda </button>
             <a class="boton_correo" href="correo.php">Mandar a correo</a>
-    </div>
+        </div>
+    </div> --> 
 </body>
 <footer>
     <section>
@@ -117,23 +133,19 @@
     </section>
 </footer>
 
-
 <?php
 $tipoSesion = isset($_SESSION["tipoSesion"]) ? $_SESSION["tipoSesion"] : null;
-
-    if ($tipoSesion == "usuario") { ?>
-        <script>
-            document.getElementById("loginbtn").style.display = 'none';
-            document.getElementById("carritobtn").style.display = 'inline';
-        </script>
-    <?php } elseif ($tipoSesion == "admin") { ?>
-        <script>
-            document.getElementById("loginbtn").style.display = 'none';
-        </script>
-    <?php } elseif ($tipoSesion != "admin" && $tipoSesion != "usuario") { ?>
-        <script>
-            document.getElementById("carritobtn").style.display = 'none';
-            document.getElementById("salirbtn").style.display = 'none';
-        </script>
-    <?php } ?>
+if ($tipoSesion == "usuario") { ?>
+    <script>
+        document.getElementById("loginbtn").style.display = 'none';
+        document.getElementById("carritobtn").style.display = 'block';
+        document.getElementById("salirbtn").style.display = 'block';
+    </script>
+<?php } else { ?>
+    <script>
+        document.getElementById("loginbtn").style.display = 'block';
+        document.getElementById("carritobtn").style.display = 'none';
+        document.getElementById("salirbtn").style.display = 'none';
+    </script>
+<?php } ?>
 </html>

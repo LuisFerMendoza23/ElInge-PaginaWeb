@@ -1,47 +1,153 @@
 <?php
 session_start();
 include "cone.php"; 
-include "orden.php";
+
+//Capturar IdServicio de URL y guardar en sesion
+if (isset($_GET['idservicio'])) {
+    $_SESSION['IdServicio'] = $_GET['idservicio'];
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['Lugar']) && isset($_POST['Fecha']) && isset($_POST['Hora'])) {
         
-        $lugar = $_POST['Lugar'];
-        $fecha = $_POST['Fecha'];
-        $hora = $_POST['Hora'];
+        $lugar = mysqli_real_escape_string($con, $_POST['Lugar']);
+        $fecha = mysqli_real_escape_string($con, $_POST['Fecha']);
+        $hora = mysqli_real_escape_string($con, $_POST['Hora']);
 
-        $sql = "INSERT INTO agenda (Lugar, Fecha, Hora) VALUES ('$lugar', '$fecha', '$hora')";
-
-        if (mysqli_query($con, $sql)) {
-            //alerta
+        // Insertar la nueva agenda en la tabla `agenda`
+        $sql_agenda = "INSERT INTO agenda (Lugar, Fecha, Hora) VALUES ('$lugar', '$fecha', '$hora')";
+        $result_agenda = mysqli_query($con, $sql_agenda);
+        if ($result_agenda) {
             echo '<script>alert("Datos insertados correctamente");</script>';
-            //Insertar los elementos en la orden
-            $sql_orden = "SELECT * FROM orden";
-            $result_orden = mysqli_query($con, $sql_orden);
+            // Obtener el último ID insertado
+            $last_id = mysqli_insert_id($con);
 
-            // Recorre los registros y muestra los valores
-            while ($row_orden = mysqli_fetch_assoc($result_orden)) {
-                echo 'IdOrden: ' . $row_orden['IdOrden'] . '<br>';
-                echo 'IdUsuario: ' . $row_orden['IdUsuario'] . '<br>';
-                echo 'Nombre: ' . $row_orden['Nombre'] . '<br>';
-                echo 'Correo: ' . $row_orden['Correo'] . '<br>';
-                echo 'Fecha: ' . $row_orden['Fecha'] . '<br>';
-                echo 'Fecha_orden: ' . $row_orden['Fecha_orden'] . '<br>';
-                echo '<hr>'; // Separador entre registros
-            }
-            //Cambio de pagina
-            //echo '<script>window.location.href = "vista_admin.php";</script>';
-        } else {
-            echo "Error al insertar datos: " . mysqli_error($con);
+            // Consultar los datos recién insertados
+            $sql_select = "SELECT * FROM agenda WHERE IdAgenda = $last_id";
+            $result_select = mysqli_query($con, $sql_select);
+
+            if ($result_select) {
+                $row_agenda = mysqli_fetch_assoc($result_select);
+
+                // Mostrar los datos en la consola del navegador
+                echo '<script>';
+                echo 'console.log("Datos insertados en agenda:");';
+                echo 'console.log("Lugar: ' . $row_agenda['Lugar'] . '");';
+                echo 'console.log("Fecha: ' . $row_agenda['Fecha'] . '");';
+                echo 'console.log("Hora: ' . $row_agenda['Hora'] . '");';
+                echo '</script>';
+
+                if(isset($_SESSION['IdUsuario'])) {
+                    //Obtener los datos del usuario desde la base de datos
+                    $idusuario = $_SESSION['IdUsuario'];
+                    $sql_usuario = "SELECT Nombre, Correo FROM usuarios WHERE IdUsuario = '$idusuario'";
+                    $result_usuario = mysqli_query($con, $sql_usuario);
+                    
+                    if(mysqli_num_rows($result_usuario) > 0) {
+                        $row_usuario = mysqli_fetch_assoc($result_usuario);
+                        $nombre = $row_usuario['Nombre'];
+                        $correo = $row_usuario['Correo'];
+                        $fechaOrden = date('Y-m-d H:i:s');
+                        
+                        // Insertar la nueva orden en la tabla `orden`
+                        $sql_orden = "INSERT INTO orden (IdUsuario, Nombre, Correo, Fecha, Fecha_orden) VALUES ('$idusuario', '$nombre', '$correo', '$fecha', '$fechaOrden')";
+                        $result_orden = mysqli_query($con, $sql_orden);
+                    
+                        if($result_orden) {
+                            echo '<script>alert("Datos insertados correctamente en la tabla orden.");</script>';
+                            $last_id_orden = mysqli_insert_id($con);
+
+                            $sql_select_orden = "SELECT * FROM orden WHERE IdOrden = $last_id_orden";
+                            $result_select_orden = mysqli_query($con, $sql_select_orden);
+
+                            if ($result_select_orden) {
+                                $row_orden = mysqli_fetch_assoc($result_select_orden);
+
+                                echo '<script>';
+                                echo 'console.log("Datos insertados en orden:");';
+                                echo 'console.log("IdOrden: ' . $row_orden['IdOrden'] . '");';
+                                echo 'console.log("IdUsuario: ' . $row_orden['IdUsuario'] . '");';
+                                echo 'console.log("Nombre: ' . $row_orden['Nombre'] . '");';
+                                echo 'console.log("Correo: ' . $row_orden['Correo'] . '");';
+                                echo 'console.log("Fecha: ' . $row_orden['Fecha'] . '");';
+                                echo 'console.log("Fecha_orden: ' . $row_orden['Fecha_orden'] . '");';
+                                echo '</script>';
+
+                                // Validar que IdServicio esté presente en la sesión
+                                if(isset($_SESSION['IdServicio'])) {
+                                    $idservicio = $_SESSION['IdServicio'];
+                                    
+                                    $sql_servicios = "SELECT nombreS, descriS, precioS FROM servicios WHERE IdServicio = $idservicio";
+                                    $result_servicios = mysqli_query($con, $sql_servicios);
+
+                                    if($result_servicios && mysqli_num_rows($result_servicios) > 0) {
+                                        while ($row_servicio = mysqli_fetch_assoc($result_servicios)) {
+                                            $nombres = $row_servicio['nombreS'];
+                                            $descriS = $row_servicio['descriS'];
+                                            $precioS = $row_servicio['precioS'];
+
+                                            $sql_orden_detalles = "INSERT INTO orden_detalles (IdOrden, nombreS, descriS, precioS, Lugar, Hora, IdServicio) VALUES ('$last_id_orden', '$nombres', '$descriS', '$precioS', '$lugar', '$hora', '$idservicio')";
+                                            $result_orden_detalles = mysqli_query($con, $sql_orden_detalles);
+
+                                            if($result_orden_detalles) {
+                                                echo '<script>alert("Datos insertados correctamente en la tabla orden_detalles.");</script>';
+                                                $last_id_orden_detalles = mysqli_insert_id($con);
+                                                $sql_select_orden_detalles = "SELECT * FROM orden_detalles WHERE IdOrdenDetalles = $last_id_orden_detalles";
+                                                $result_select_orden_detalles = mysqli_query($con, $sql_select_orden_detalles);
+
+                                                if ($result_select_orden_detalles) {
+                                                    $row_orden_detalles = mysqli_fetch_assoc($result_select_orden_detalles);
+
+                                                    echo '<script>';
+                                                    echo 'console.log("Datos insertados en orden_detalles:");';
+                                                    echo 'console.log("IdOrdenDetalles: ' . $row_orden_detalles['IdOrdenDetalles'] . '");';
+                                                    echo 'console.log("IdOrden: ' . $row_orden_detalles['IdOrden'] . '");';
+                                                    echo 'console.log("nombreS: ' . $row_orden_detalles['nombreS'] . '");';
+                                                    echo 'console.log("descriS: ' . $row_orden_detalles['descriS'] . '");';
+                                                    echo 'console.log("precioS: ' . $row_orden_detalles['precioS'] . '");';
+                                                    echo 'console.log("Lugar: ' . $row_orden_detalles['Lugar'] . '");';
+                                                    echo 'console.log("Hora: ' . $row_orden_detalles['Hora'] . '");';
+                                                    echo 'console.log("IdServicio: ' . $row_orden_detalles['IdServicio'] . '");';
+                                                    echo '</script>';
+                                                } else {
+                                                    echo '<script>alert("Error al obtener los datos insertados en la tabla orden_detalles: ' . mysqli_error($con) . '");</script>';
+                                                }
+                                            } else {
+                                                echo '<script>alert("Error al insertar datos en la tabla orden_detalles: ' . mysqli_error($con) . '");</script>';
+                                            }
+                                        }
+                                    } else {
+                                        echo '<script>alert("Error al obtener los datos de la tabla servicios: ' . mysqli_error($con) . '");</script>';
+                                    }
+                                } else {
+                                    echo '<script>alert("IdServicio no proporcionado.");</script>';
+                                }
+
+                            } else {
+                                echo '<script>alert("Error al obtener los datos insertados en la tabla orden: ' . mysqli_error($con) . '");</script>';
+                            }
+                        } else {
+                            echo '<script>alert("Error al insertar datos en la tabla orden: ' . mysqli_error($con) . '");</script>';
+                        }
+                    } else {
+                        echo '<script>alert("Error al obtener los datos del usuario: ' . mysqli_error($con) . '");</script>';
+                    }
+                } else {
+                    echo '<script>alert("Error no se encontro la sesion del usuario.");</script>';
+                }
+                // Redirigir a servicios.php
+                header("Location: servicios.php");
+                exit();
+                
+            } else {
+                echo '<script>alert("Error al insertar datos en la tabla agenda: ' . mysqli_error($con) .
+            
+
+            mysqli_close($con);
+        }    
         }
-
-        mysqli_close($con);
-    } else {
-        echo "Por favor, completa todos los campos del formulario.";
-    }
 }
-
-
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,3 +1,4 @@
+/*
 *{
     margin: 0;
     font-family: inherit;
@@ -6,6 +7,178 @@
     list-style: none;
     
 }
+main{
+    padding: auto;
+}
 .textoejemplo{
     padding: 2em;
 }
+
+.cart_container{
+    display: flex;
+    width: 100%;
+    gap: 2em;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1em;
+}
+
+.servicio_img, .servicio_titulo, .categoria_servicio, 
+.servicio_desc, .servicio_precio, .servicio_boton{
+    border: solid;
+    border-color: blue;
+    padding:  0.5em 2em;
+}
+.servicio_data{
+    border:solid;
+    border-color:green;
+    padding:1em;
+    display:flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.servicio_cont{
+    width:100%;
+}
+.cart_container > * {
+    padding: 1em; 
+}
+section{
+    border:solid;
+    border-color:red;
+}
+.servicio_titulo{
+    height: 30%;
+}
+.servicio_img{
+    height:70%;
+}
+.categoria_servicio, .servicio_desc, .servicio_precio{
+    height:33%;
+}
+.name_img, .desc_price, .servicio_cont_botones{
+    width: 33%;
+}
+.imagen_servicio{
+    width: 100%; 
+    height: 240px;
+    border-radius: 0.5em;
+}
+*/
+* {
+    margin: 0;
+    font-family: inherit;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+main {
+    padding: 2em;
+}
+
+.cart_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2em;
+    padding: 1em;
+}
+
+.servicio_cont {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    padding: 1em;
+    background-color: #F1C93B;
+    border: 3px solid #1A5D1A;
+    border-radius: 1em;
+    min-width: 300px;
+    cursor: pointer;
+}
+.addToCart_Button{
+    margin: 2em;
+    background-color: #1A5D1A;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-style: unset;
+    align-items: center;
+}
+.servicio_data {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1em;
+}
+
+.name_img, .desc_price {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.name_img {
+    flex: 1;
+}
+
+.desc_price {
+    flex: 2;
+}
+
+.servicio_img {
+    width: 100%;
+    height: 100%;
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.imagen_servicio {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5em;
+}
+
+.servicio_titulo h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.categoria_servicio, .servicio_desc, .servicio_precio {
+    padding: 0.5em;
+}
+
+.categoria_servicio2 {
+    margin: 0;
+    /*font-weight: bold; */
+}
+
+.servicio_precio .precio {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.servicio_boton {
+    text-align: center;
+}
+
+.servicio_boton .boton {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.3em;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.servicio_boton .boton:hover {
+    background-color: #0056b3;
+}
+
+.btn_eliminar{
+    background-color: #1A5D1A;
+    color: white;
+}
+

@@ -40,6 +40,16 @@ session_start();
             <li> <a id="carritobtn" href="carrito.php">Carrito</a></li>
             <li> <a id="salirbtn" href="salir.php">Salir</a></li>
         </ul>
+        <ul>
+            <div class="menu_user">
+                <?php 
+                    if(isset($_SESSION['Nombre'])){
+                        $username = $_SESSION['Nombre'];
+                        echo '<li> Usuario: ' . htmlspecialchars($username) . '</li>';
+                    } 
+                ?>
+            </div>
+        </ul>
     </nav>
 </header>
 <body>
